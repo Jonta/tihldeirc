@@ -1,7 +1,9 @@
 var bot = require('bot.js'),
     fs = require('fs'),
     http = require('http'),
-    mordi = JSON.parse(fs.readFileSync('mordi.txt'));
+    Iconv = require('iconv').Iconv,
+    iconv = new Iconv('ISO-8859-1', 'UTF-8'),
+    mordi = JSON.parse(fs.readFileSync('assets/mordi.txt'));
 
 function onMessage(from, to, message) {
     if (message.match(/mordi/)) {
@@ -14,7 +16,7 @@ function onMessage(from, to, message) {
         };
         http.get(options, function(res) {
             res.on('data', function(data) {
-                data = JSON.parse(data);
+                data = JSON.parse(iconv.convert(data));
                 bot.client.say(bot.channel, from + ': hehe ja, men ' + data.sentences[0].trans);
             });
         });
