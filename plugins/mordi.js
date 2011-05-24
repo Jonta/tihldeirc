@@ -6,6 +6,7 @@ var bot = require('bot.js'),
 function onMessage(from, to, message) {
     if (message.match(/mordi/)) {
         var joke = mordi[Math.floor(Math.random() * mordi.length)];
+        joke = joke.replace(/Yo mama/, 'mordi');
         translate.translate('en', 'no', joke, function(text) {
             bot.client.say(bot.channel, from + ': hehe ja, men ' + text);
         });
