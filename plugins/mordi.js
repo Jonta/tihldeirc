@@ -4,7 +4,7 @@ var bot = require('bot.js'),
     mordi = JSON.parse(fs.readFileSync('assets/mordi.txt'));
 
 function onMessage(from, to, message) {
-    if (message.match(/mordi/)) {
+    if (message.match(/moRdi/)) {
         var joke = mordi[Math.floor(Math.random() * mordi.length)];
         joke = joke.replace(/Yo mama/, 'mordi');
         translate.translate('en', 'no', joke, function(text) {
