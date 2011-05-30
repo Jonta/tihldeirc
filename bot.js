@@ -14,3 +14,7 @@ exports.client = new irc.Client('irc.homelien.no', 'hilde', {
     channels: [this.channel]
 });
 
+exports.say = function(message) {
+    this.client.say(this.channel, message);
+};
+
