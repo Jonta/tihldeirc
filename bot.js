@@ -1,4 +1,6 @@
-require.paths.unshift('.');
+var path = require('path');
+console.log('dirname', __dirname);
+require.paths.unshift(path.join('/', path.join(__dirname, '/')));
 
 var fs = require('fs'),
 irc = require("irc"),
