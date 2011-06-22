@@ -1,12 +1,13 @@
-var path = require('path');
-console.log('dirname', __dirname);
-require.paths.unshift(path.join('/', path.join(__dirname, '/')));
+var path = require('path'),
+    dir = path.join('/', path.join(__dirname, '/'));
+console.log('dirname', dir);
+require.paths.unshift(dir);
 
 var fs = require('fs'),
 irc = require("irc"),
 plugins = require('plugins.js');
 
-plugins.watch('./plugins/');
+plugins.watch(dir + 'plugins/');
 
 exports.channel = '#nodester';
 
