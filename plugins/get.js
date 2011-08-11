@@ -1,14 +1,10 @@
 var http = require('http'),
 path = require('path');
 
-exports.get = function(url, callback) {
+exports.get = function(option, callback) {
     var data = '';
     url = url.split('/');
-    http.get({
-        host: url[0],
-        path: path.join('/', url.slice(1).join('/'))
-    },
-    function(res) {
+    http.get(option, function(res) {
         res.on('data', function(c) {
             data += c;
         });

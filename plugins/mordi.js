@@ -1,9 +1,9 @@
-var bot = require('bot.js'),
-translate = require('plugins/translate.js'),
+var bot = require('../bot.js'),
+translate = require('./translate.js'),
 fs = require('fs'),
 mordi = JSON.parse(fs.readFileSync('assets/mordi.txt'));
 
-bot.addListener(this, 'message', function(from, to, msg) {
+bot.addListener(__filename, 'message', function(from, to, msg) {
     if (msg.match(/moRdI/)) {
         var joke = mordi[Math.floor(Math.random() * mordi.length)];
         joke = joke.replace(/Yo mama/, 'mordi');

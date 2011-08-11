@@ -1,9 +1,8 @@
-var bot = require('bot.js');
+var bot = require('../bot.js'),
+from = exports.from = {},
+msg = exports.msg = [];
 
-var from = exports.from = {};
-var msg = exports.msg = [];
-
-bot.addListener(this, 'message', function(f, t, m) {
+bot.addListener(__filename, 'message', function(f, t, m) {
     var bundle = {
         date: new Date(),
         from: f,
@@ -17,7 +16,7 @@ bot.addListener(this, 'message', function(f, t, m) {
     msg.unshift(bundle);
 });
 
-bot.onTrigger(this, 'Seen', 'seen', function(from, to, msg) {
+bot.onTrigger(__filename, 'Seen', 'seen', function(from, to, msg) {
     if (from[msg]) {
         bot.client.say(to, 'Æ såg %s sist den %s me meldinga %s', msg, from[msg][0].date, from[msg][0].msg);
     }

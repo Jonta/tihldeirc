@@ -1,7 +1,7 @@
-var bot = require('bot.js'),
+var bot = require('../bot.js'),
 twitter = require('twitter'),
 fs = require('fs'),
-twit = new twitter(JSON.parse(fs.readFileSync('twitter-keys')));
+twit = new twitter(JSON.parse(fs.readFileSync('assets/twitter-keys')));
 
 twit.stream('statuses/filter', {
     track: 'tihlde'
@@ -12,7 +12,7 @@ function(stream) {
     });
 });
 
-bot.onTrigger(this, 'Twitter', 'twitter', function(from, to, msg) {
+bot.onTrigger(__filename, 'Twitter', 'twitter', function(from, to, msg) {
     twit.updateStatus(from + ': ' + msg, function(data) {});
 });
 

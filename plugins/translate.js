@@ -1,4 +1,4 @@
-var bot = require('bot.js'),
+var bot = require('../bot.js'),
 http = require('http');
 
 var translate = exports.translate = function(from, to, text, callback) {
@@ -22,7 +22,7 @@ var translate = exports.translate = function(from, to, text, callback) {
     });
 };
 
-bot.onTrigger(this, 'Translate', ['t', 'translate'], function(from, to, msg) {
+bot.onTrigger(__filename, 'Translate', ['t', 'translate'], function(from, to, msg) {
     var words = msg.split(' ');
     if (words.length > 3) {
         msg = words.slice(2).join(' ');

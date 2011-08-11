@@ -1,53 +1,62 @@
 var fs = require('fs'),
-irc = require("irc"),
+plugins = require('./plugins.js'),
+winston = require('winston'),
 listeners = {},
 triggers = [],
-self = this;
+self = this,
+client;
 
-require('plugins.js').watch();
+require('colors');
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {
+    colorize: true
+});
 
 exports.triggers = triggers;
 
-var client = exports.client = new irc.Client('irc.efnet.org', 'hilde', {
-    userName: 'tihihilde',
-    realName: 'tihihilde',
-    channels: ['#tihlde']
-});
+exports.start = function(c) {
+    client = exports.client = c;
+    plugins.watch();
+};
 
-exports.addListener = function(obj, type, fn) {
+exports.addListener = function(module, type, fn) {
     client.addListener(type, fn);
-    if (!listeners[obj]) {
-        listeners[obj] = [];
+    if (!listeners[module]) {
+        listeners[module] = [];
     }
-    listeners[obj].push({
+    listeners[module].push({
         type: type,
         fn: fn
     });
+    winston.info('[bot] Add listener from ' + module.replace(/^.*\//, '').green + ' (' + listeners[module].length + ')');
 };
 
-exports.removeListeners = function(obj) {
-    listeners[obj].forEach(function(l) {
+exports.removeListeners = function(module) {
+    winston.info('[bot] removeListeners ' + module);
+    listeners[module].forEach(function(l) {
+        winston.info('[bot] Remove listener ' + l);
         client.removeListener(l.type, l.fn);
     });
+    delete listeners[module];
 };
 
-exports.onTrigger = function(obj, name, triggerKeys, callback) { //
+exports.onTrigger = function(module, name, triggerKeys, callback) { //
     triggerKeys = [].concat(triggerKeys).filter(function(tk) { 
         return tk !== undefined;
     });
+    winston.info('[bot] Add Trigger ' + name + ' [' + triggerKeys + ']');
     triggers.push({
         name: name,
         triggerKeys: triggerKeys
     });
     triggerKeys.forEach(function(triggerKey) {
-        self.addListener(obj, 'message', function(from, to, msg) {
-            // TODO: Fix with pure regexp
-            var regexp = new RegExp('^!' + triggerKey + (msg.indexOf(' ') > 0 ? ' ': ''));
+        self.addListener(module, 'message', function(from, to, msg) {
+            var regexp = new RegExp('^\!(' + triggerKey + ' |' + triggerKey + '$)');
             if (msg.match(regexp)) {
                 try {
                     callback(from, to, msg.replace(regexp, ''));
                 } catch(e) {
-                    console.log('Trigger error for %s:', triggerKey, e);
+                    winston.error('[bot] Trigger error for %s:', triggerKey, e);
                 }
             }
         });

@@ -1,6 +1,6 @@
-var bot = require('bot.js'),
-t = require('plugins/translate.js'),
-g = require('plugins/get.js'),
+var bot = require('../bot.js'),
+t = require('./translate.js'),
+g = require('./get.js'),
 $ = require('jquery'),
 _ = require('underscore');
 
@@ -9,7 +9,7 @@ var currentTo, say = function(msg) {
 },
 s = say;
 
-bot.onTrigger(this, 'Godmode', ['e', 'meh', 'god'], function(from, to, msg) {
+bot.onTrigger(__filename, 'Godmode', ['e', 'meh', 'god'], function(from, to, msg) {
     try {
         console.log('%s is trying to run %s...', from, msg);
         currentTo = to;
