@@ -1,4 +1,4 @@
-var bot = require('../bot.js'),
+var bot = require('bot.js'),
 http = require('http');
 
 var translate = exports.translate = function(from, to, text, callback) {

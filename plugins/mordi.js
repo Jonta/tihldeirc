@@ -1,4 +1,4 @@
-var bot = require('../bot.js'),
+var bot = require('bot.js'),
 translate = require('./translate.js'),
 fs = require('fs'),
 mordi = JSON.parse(fs.readFileSync('assets/mordi.txt'));

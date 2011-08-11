@@ -1,4 +1,4 @@
-var bot = require('../bot.js'),
+var bot = require('bot.js'),
 twitter = require('twitter'),
 fs = require('fs'),
 twit = new twitter(JSON.parse(fs.readFileSync('assets/twitter-keys')));

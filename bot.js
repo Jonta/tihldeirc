@@ -6,6 +6,8 @@ triggers = [],
 self = this,
 client;
 
+require.paths.unshift('.');
+
 require('colors');
 winston.remove(winston.transports.Console);
 winston.add(winston.transports.Console, {
@@ -32,7 +34,7 @@ exports.addListener = function(module, type, fn) {
 };
 
 exports.removeListeners = function(module) {
-    winston.info('[bot] removeListeners ' + module);
+    winston.info('[bot] removeListeners from ' + module.replace(/^.*\//, '').green + ' (' + listeners[module].length + ')');
     listeners[module].forEach(function(l) {
         winston.info('[bot] Remove listener ' + l);
         client.removeListener(l.type, l.fn);
