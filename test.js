@@ -16,7 +16,7 @@ client = (function() {
 bot.start(client);
 
 function s(msg) {
-    winston.info('[test] s ' + msg);
+    winston.info('[test] s ' + msg.cyan);
     listeners.forEach(function(l) {
         l('eirikb', '#test', msg);
     });
@@ -27,6 +27,9 @@ setTimeout(function() {
     s('!e 1+1');
     s('google.com');
     s('s/google/microsoft');
+    s('gogle er best');
+    s('google*');
+    setTimeout(process.exit, 500);
 },
 500);
 
