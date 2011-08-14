@@ -10,6 +10,9 @@ require.paths.unshift('.');
 
 require('colors');
 winston.remove(winston.transports.Console);
+winston.add(winston.transports.File, {
+    filename: 'out.log'
+});
 winston.add(winston.transports.Console, {
     colorize: true
 });

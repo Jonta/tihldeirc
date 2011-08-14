@@ -28,8 +28,13 @@ setTimeout(function() {
     s('s/google/microsoft');
     s('1 +  1');
     s('4 eur to nok');
+    s('4 pound to nok');
     s('gogle er best');
     s('google*');
+    setTimeout(function() {
+        s('!e typeof kaffe === "undefined" ? kaffe = 1 : ++kaffe;');
+    },
+    100);
     setTimeout(process.exit, 500);
 },
 500);
