@@ -1,5 +1,6 @@
 var bot = require('bot.js'),
-http = require('http');
+http = require('http'),
+winston = require('winston');
 
 var translate = exports.translate = function(from, to, text, callback) {
     var options = {
@@ -16,7 +17,7 @@ var translate = exports.translate = function(from, to, text, callback) {
                 data = JSON.parse(data);
                 callback(data.sentences[0].trans);
             } catch(e) {
-                console.log('Unable to parse data for translate.js', e);
+                winston.error('Unable to parse data for translate.js', e);
             }
         });
     });
