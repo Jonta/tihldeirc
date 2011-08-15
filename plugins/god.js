@@ -11,11 +11,9 @@ say = function(msg) {
     bot.client.say(currentTo, msg);
 },
 s = say,
-currentTo,
-ignoreKeys;
+currentTo;
 
 function loadKaffe(self) {
-    ignoreKeys = Object.keys(self);
     try {
         data = fs.readFileSync('kaffe.json');
         if (data) {
@@ -31,16 +29,12 @@ function loadKaffe(self) {
 
 function storeKaffe(self) {
     var obj = {};
-    try  {
-        Object.keys(self).filter(function(key) {
-            return ignoreKeys.indexOf(key) < 0;
-        }).forEach(function(key) {
-            obj[key] = self[key];
-        });
-        fs.writeFileSync('kaffe.json', JSON.stringify(obj));
-    } catch(e) {
-        winston.error('[god] ' + e.toString());
-    }
+    Object.keys(self).filter(function(key) {
+        return typeof self[key] === 'number';
+    }).forEach(function(key) {
+        obj[key] = self[key];
+    });
+    fs.writeFileSync('kaffe.json', JSON.stringify(obj));
 }
 
 bot.onTrigger(__filename, 'Godmode', ['e', 'meh', 'god'], function(from, to, msg) {
