@@ -8,7 +8,9 @@
     "winston": "*",
      "irc": "*",
      "colors": "*",
-     "twitter": "*"
+     "twitter": "*",
+     "jquery": "*",
+     "underscore": "*"
   }
 }
 
