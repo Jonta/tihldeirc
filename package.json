@@ -1,0 +1,14 @@
+{
+  "name": "hilde",
+  "author": "Eirik Brandtzæg <eirikb@eirikb.no>",
+  "contributors": [],
+  "dependencies": [],
+  "version": "0.0.2",
+  "dependencies": {
+    "winston": "*",
+     "irc": "*",
+     "colors": "*",
+     "twitter": "*"
+  }
+}
+
