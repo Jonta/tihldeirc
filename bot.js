@@ -6,8 +6,6 @@ triggers = [],
 self = this,
 client;
 
-require.paths.unshift('.');
-
 require('colors');
 winston.remove(winston.transports.Console);
 winston.add(winston.transports.File, {

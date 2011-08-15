@@ -1,4 +1,4 @@
-var bot = require('bot.js'),
+var bot = require('../bot.js'),
 t = require('./translate.js'),
 g = require('./get.js'),
 $ = require('jquery'),
