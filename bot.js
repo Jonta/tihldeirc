@@ -23,7 +23,7 @@ exports.start = function(c) {
     winston.add(function() {
         this.name = "eirikbLogger";
         this.log = function(level, msg, meta, callback) {
-//            client.say('eirikb', msg);
+            client.say('eirikb', msg);
             callback(null, true);
         };
     });
@@ -38,11 +38,11 @@ exports.addListener = function(module, type, fn) {
         type: type,
         fn: fn
     });
-    winston.info('[bot] Add listener from ' + module.replace(/^.*\//, '').green + ' (' + listeners[module].length + ')');
+    winston.info('[bot] Add listener from ' + module.replace(/^.*\//, '') + ' (' + listeners[module].length + ')');
 };
 
 exports.removeListeners = function(module) {
-    winston.info('[bot] removeListeners from ' + module.replace(/^.*\//, '').green + ' (' + listeners[module].length + ')');
+    winston.info('[bot] removeListeners from ' + module.replace(/^.*\//, '')+ ' (' + listeners[module].length + ')');
     listeners[module].forEach(function(l) {
         winston.info('[bot] Remove listener ' + l);
         client.removeListener(l.type, l.fn);

@@ -43,7 +43,7 @@ bot.onTrigger(__filename, 'Godmode', ['e', 'meh', 'god'], function(from, to, msg
         first = false;
     }
     try {
-        winston.info(from.yellow + ' is trying to run ' + msg.yellow);
+        winston.info(from + ' is trying to run ' + msg);
         currentTo = to;
         var e = eval(msg);
         if (typeof e !== 'undefined') {
