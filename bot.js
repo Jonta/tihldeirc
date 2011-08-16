@@ -23,7 +23,7 @@ exports.start = function(c) {
     winston.add(function() {
         this.name = "eirikbLogger";
         this.log = function(level, msg, meta, callback) {
-            client.say('eirikb', msg);
+//            client.say('eirikb', msg);
             callback(null, true);
         };
     });
