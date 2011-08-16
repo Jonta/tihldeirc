@@ -20,13 +20,16 @@ exports.triggers = triggers;
 exports.start = function(c) {
     client = exports.client = c;
     plugins.watch();
-    winston.add(function() {
-        this.name = "eirikbLogger";
-        this.log = function(level, msg, meta, callback) {
-            client.say('eirikb', msg);
-            callback(null, true);
-        };
-    });
+    setTimeout(function() {
+        winston.add(function() {
+            this.name = "eirikbLogger";
+            this.log = function(level, msg, meta, callback) {
+                client.say('eirikb', msg);
+                callback(null, true);
+            };
+        });
+    },
+    1000);
 };
 
 exports.addListener = function(module, type, fn) {
@@ -42,7 +45,7 @@ exports.addListener = function(module, type, fn) {
 };
 
 exports.removeListeners = function(module) {
-    winston.info('[bot] removeListeners from ' + module.replace(/^.*\//, '')+ ' (' + listeners[module].length + ')');
+    winston.info('[bot] removeListeners from ' + module.replace(/^.*\//, '') + ' (' + listeners[module].length + ')');
     listeners[module].forEach(function(l) {
         winston.info('[bot] Remove listener ' + l);
         client.removeListener(l.type, l.fn);
