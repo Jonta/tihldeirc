@@ -8,7 +8,9 @@ client = (function() {
         },
         removeListener: function() {},
         say: function(to, msg) {
-            winston.info('[test] > ' + to.red + (' ' + msg).yellow);
+            if (to !== 'eirikb') {
+                winston.info('[test] > ' + to.red + (' ' + msg).yellow);
+            }
         }
     };
 } ());

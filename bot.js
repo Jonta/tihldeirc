@@ -14,6 +14,13 @@ winston.add(winston.transports.File, {
 winston.add(winston.transports.Console, {
     colorize: true
 });
+winston.add(function() {
+    this.name = "eirikbLogger";
+    this.log = function(level, msg, meta, callback) {
+        client.say('eirikb', msg);
+        callback(null, true);
+    };
+});
 
 exports.triggers = triggers;
 
