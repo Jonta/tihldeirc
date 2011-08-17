@@ -1,6 +1,6 @@
 var bot = require('../bot.js'),
 history = require('./history.js'),
-regex = /\bs\/([^\/]+)\/([^\/]+)/;
+regex = /\b(s|troll)\/([^\/]+)\/([^\/]+)/;
 
 function calcWord(a, b) {
     var count = 0,
@@ -17,6 +17,10 @@ bot.addListener(__filename, 'message', function(from, to, msg) {
     var last, fixed, word;
     if (msg.match(/^s\//)) {
         fixed = history.from[from][1].msg.replace(msg.match(regex)[1], msg.match(regex)[2]);
+        bot.client.say(to, '<' + from + '> ' + fixed);
+    }
+    if (msg.match(/^troll\//)) {
+        fixed = history.msg[1].msg.replace(msg.match(regex)[1], msg.match(regex)[2]);
         bot.client.say(to, '<' + from + '> ' + fixed);
     }
     if (msg.match(/^\w*\*$/)) {
