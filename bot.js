@@ -53,7 +53,7 @@ exports.removeListeners = function(module) {
     delete listeners[module];
 };
 
-exports.onTrigger = function(module, name, triggerKeys, callback) { //
+exports.onTrigger = function(module, name, triggerKeys, callback) {
     triggerKeys = [].concat(triggerKeys).filter(function(tk) { 
         return tk !== undefined;
     });
