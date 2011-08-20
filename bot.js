@@ -54,7 +54,7 @@ exports.removeListeners = function(module) {
 };
 
 exports.onTrigger = function(module, name, triggerKeys, callback) {
-    triggerKeys = [].concat(triggerKeys).filter(function(tk) { 
+    triggerKeys = [].concat(triggerKeys).filter(function(tk) {
         return tk !== undefined;
     });
     winston.info('[bot] Add Trigger ' + name + ' [' + triggerKeys + ']');
