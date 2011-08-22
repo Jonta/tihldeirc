@@ -1,9 +1,9 @@
 var bot = require('./bot.js'),
 irc = require('irc'),
-client = new irc.Client('irc.efnet.org', 'hilde', {
+client = new irc.Client('irc.efnet.org', 'hildemor', {
     userName: 'tihihilde',
     realName: 'tihihilde',
-    channels: ['#tihlde']
+    channels: ['#testfrest']
 });
 
 bot.start(client);
