@@ -7,7 +7,7 @@ twit = new twitter(JSON.parse(fs.readFileSync('assets/twitter-keys')));
 twit.stream('user', function(stream) {
     stream.on('data', function(data) {
         var s;
-        if (data.target && data.user) {
+        if (data.text && data.user) {
             s = '[twitter] ' + data.user.screen_name + ': ' + data.text;
             bot.client.say('#tihlde', s);
             winston.info(s);
