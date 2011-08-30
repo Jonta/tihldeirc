@@ -13,7 +13,7 @@ bot.addListener(__filename, 'message', function(from, to, msg) {
             if (!data.error || data.error.length === 0) {
                 data.rhs = data.rhs.
                 replace(/&#215;/, '*').
-		replace(/&nbsp;/g, ' ').
+		replace(/�/g, ' ').
                 replace(/<sup>/, '^').
                 replace(/<\/sup>/, '');
                 bot.client.say(to, from + ': ' + data.lhs + ' = ' + data.rhs);
