@@ -14,14 +14,20 @@ function calcWord(a, b) {
 }
 
 bot.addListener(__filename, 'message', function(from, to, msg) {
-    var last, fixed, word;
+    var last, fixed, word, i;
     if (msg.match(/^s\//)) {
         fixed = history.from[from][1].msg.replace(msg.match(regex)[1], msg.match(regex)[2]);
         bot.client.say(to, '<' + from + '> ' + fixed);
     }
     if (msg.match(/^troll\//)) {
-        fixed = history.msg[1].msg.replace(msg.match(regex)[1], msg.match(regex)[2]);
-        bot.client.say(to, '<' + history.msg[1].from + '> ' + fixed);
+        for (i = 1; i < 5; i++) {
+            last = history.msg[i].msg;
+            fixed = last.replace(msg.match(regex)[1], msg.match(regex)[2]);
+            if (last !== fixed) {
+                bot.client.say(to, '<' + history.msg[i].from + '> ' + fixed);
+                break;
+            }
+        }
     }
     if (msg.match(/^\w*\*$/)) {
         word = '';
