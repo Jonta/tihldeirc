@@ -12,10 +12,10 @@ bot.addListener(__filename, 'message', function(from, to, msg) {
             data = eval('(' + data + ')');
             if (!data.error || data.error.length === 0) {
                 data.rhs = data.rhs.
-                replace(/&#215;/, '*').
+                replace(/&#215;/g, '*').
 		replace(/�/g, ' ').
-                replace(/<sup>/, '^').
-                replace(/<\/sup>/, '');
+                replace(/<sup>/g, '^').
+                replace(/<\/sup>/g, '');
                 bot.client.say(to, from + ': ' + data.lhs + ' = ' + data.rhs);
             }
         } catch(e) {
