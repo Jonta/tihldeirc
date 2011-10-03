@@ -42,6 +42,8 @@ function test() {
     s('one hundred million years to seconds');
     s('gogle er best');
     s('google*');
+    s("!e g({host: 'api.github.com', path: '/repos/jquery'},function(d){console.log(d)})");
+    s('!h one');
     setTimeout(function() {
         s('!e typeof kaffe === "undefined" ? kaffe = 1 : ++kaffe;');
     },
