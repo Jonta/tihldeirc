@@ -2,6 +2,6 @@
     "server": "irc.homelien.no", 
     "nick": "hilde2", 
     "extra": {
-        "channels": ["#testfrest"]
+        "channels": ["#tihlde"]
     }
 }

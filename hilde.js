@@ -1,9 +1,7 @@
 var fs = require('fs'),
-readline = require('readline'),
 irc = require('irc');
 
-var client, config, ignored, fname = 'evaled.json',
-rl = readline.createInterface(process.stdin, process.stdout);
+var client, config, ignored, fname = 'evaled.json';
 
 try {
     config = require('./config.json');
@@ -70,10 +68,3 @@ function boss(line, cb) {
         cb && cb(e);
     }
 }
-
-rl.on('line', function(line) {
-    boss(line, function(err, result) {
-        console.log(err, result);
-    });
-});
-
