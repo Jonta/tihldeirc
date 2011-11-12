@@ -1,8 +1,29 @@
 var fs = require('fs'),
-readline = require('readline');
+readline = require('readline'),
+irc = require('irc');
 
-var ignored, rl = readline.createInterface(process.stdin, process.stdout),
-fname = 'evaled.json';
+var client, config, ignored, fname = 'evaled.json',
+rl = readline.createInterface(process.stdin, process.stdout);
+
+try {
+    config = require('./config.json');
+    console.log(config);
+    client = new irc.Client(config.server, config.nick, config.extra);
+    client.addListener('message', function(from, to, message) {
+        console.log(from + ' => ' + to + ': ' + message);
+        if (message.match(/^e /) || client.nick === to) {
+            boss(message.replace(/^e /, ''), function(e, result) {
+                if (!e) {
+                    client.say(to !== client.nick ? to: from, result);
+                } else {
+                    client.say(from, e);
+                }
+            });
+        }
+    });
+} catch(e) {
+    console.err('Unable to start client', e);
+}
 
 setTimeout(function() {
     // Refer this to global object
@@ -38,19 +59,21 @@ function persist() {
     fs.writeFile(fname, JSON.stringify(evaled));
 }
 
-function onLine(line) {
+function boss(line, cb) {
     try {
         var e = eval(line);
         if (typeof e !== 'undefined') {
-            console.log(e);
             persist();
+            cb && cb(null, e);
         }
     } catch(e) {
-        console.log('error', e);
+        cb && cb(e);
     }
 }
 
 rl.on('line', function(line) {
-    onLine(line);
+    boss(line, function(err, result) {
+        console.log(err, result);
+    });
 });
 

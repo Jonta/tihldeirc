@@ -1,16 +1,9 @@
 {
   "name": "hilde",
   "author": "Eirik Brandtzæg <eirikb@eirikb.no>",
-  "contributors": [],
-  "dependencies": [],
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
-    "winston": "*",
-     "irc": "*",
-     "colors": "*",
-     "twitter": "*",
-     "jquery": "*",
-     "underscore": "*"
+     "irc": "*"
   }
 }
 
