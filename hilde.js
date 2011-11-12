@@ -7,11 +7,14 @@ fname = 'evaled.json';
 setTimeout(function() { (function() {
         ignored = Object.keys(this);
     })();
-    load();
+    load(function () {
+        onLine('a')
+        onLine('a="test"');
+    });
 },
 1000);
 
-function load() {
+function load(cb) {
     fs.readFile(fname, function(err, data) {
         var evaled;
 
@@ -21,12 +24,17 @@ function load() {
             try {
                 evaled = JSON.parse(data);
                 Object.keys(evaled).forEach(function(key) {
-                    eval(key + '=' + evaled[key]);
+                    try {
+                        eval(key + '=' + evaled[key]);
+                    } catch (e) {
+                        this[key] = evaled[key];
+                    }
                 });
             } catch(e) {
                 console.error(e);
             }
         }
+    cb && cb();
     });
 }
 
