@@ -4,39 +4,28 @@ readline = require('readline');
 var ignored, rl = readline.createInterface(process.stdin, process.stdout),
 fname = 'evaled.json';
 
-setTimeout(function() { (function() {
+setTimeout(function() {
+    // Refer this to global object
+    (function() {
         ignored = Object.keys(this);
-    })();
-    load(function () {
-        onLine('a')
-        onLine('a="test"');
-    });
-},
-1000);
-
-function load(cb) {
-    fs.readFile(fname, function(err, data) {
-        var evaled;
-
-        if (err) console.error(err)
-        else {
-            console.log('data', data.toString());
-            try {
-                evaled = JSON.parse(data);
-                Object.keys(evaled).forEach(function(key) {
-                    try {
-                        eval(key + '=' + evaled[key]);
-                    } catch (e) {
-                        this[key] = evaled[key];
-                    }
-                });
-            } catch(e) {
-                console.error(e);
+        fs.readFile(fname, function(err, data) {
+            var evaled;
+            if (!err) {
+                try {
+                    evaled = JSON.parse(data);
+                    Object.keys(evaled).forEach(function(key) {
+                        try {
+                            eval(key + '=' + evaled[key]);
+                        } catch(e) {
+                            this[key] = evaled[key];
+                        }
+                    });
+                } catch(e) {}
             }
-        }
-    cb && cb();
-    });
-}
+        });
+    } ())
+},
+1)
 
 function persist() {
     var evaled = Object.keys(this).filter(function(key) {
