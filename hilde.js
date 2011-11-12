@@ -1,18 +1,20 @@
 var fs = require('fs'),
 irc = require('irc');
 
-var client, config, ignored, fname = 'evaled.json';
+var replyto, client, config, ignored, fname = 'evaled.json';
 
 try {
     config = require('./config.json');
-    console.log(config);
     client = new irc.Client(config.server, config.nick, config.extra);
+
     client.addListener('message', function(from, to, message) {
+        replyto = to !== client.nick ? to: from;
+
         console.log(from + ' => ' + to + ': ' + message);
-        if (message.match(/^e /) || client.nick === to) {
+        if (message.match(/^e /) || to === client.nick) {
             boss(message.replace(/^e /, ''), function(e, result) {
                 if (!e) {
-                    client.say(to !== client.nick ? to: from, result);
+                    client.say(replyto, result);
                 } else {
                     client.say(from, e);
                 }
@@ -26,6 +28,12 @@ try {
 setTimeout(function() {
     // Refer this to global object
     (function() {
+
+        // Of all the hacks, this is the worst, but.. meh
+        this.s = function(msg) {
+            client && client.say(replyto, msg);
+        };
+
         ignored = Object.keys(this);
         fs.readFile(fname, function(err, data) {
             var evaled;
@@ -68,3 +76,4 @@ function boss(line, cb) {
         cb && cb(e);
     }
 }
+
