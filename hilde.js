@@ -1,5 +1,6 @@
 var fs = require('fs'),
-irc = require('irc');
+irc = require('irc'),
+util = require('util');
 
 var replyto, client, config, ignored, fname = 'evaled.json';
 
@@ -80,7 +81,7 @@ try {
         if (message.match(/^e /) || to === client.nick) {
             boss(message.replace(/^e /, ''), function(e, result) {
                 if (!e) {
-                    client.say(replyto, result);
+                    client.say(replyto, util.inspect(result));
                 } else {
                     client.say(from, e);
                 }
@@ -95,8 +96,16 @@ setTimeout(function() {
     // Refer this to global object
     (function() {
         // Of all the hacks, this is the worst, but.. meh
-        this.s = function(msg) {
+        this.s = function() {
+            var msg = [].slice.apply(arguments).join(' ');
             client && client.say(replyto, msg);
+        };
+
+        this.to = function(to) {
+            var msg = [].slice.apply(arguments).filter(function(e, i) {
+                return i > 0;
+            }).join(' ');
+            client && client.say(to, msg);
         };
 
         this.on = function(trigger, listener, replace) {
