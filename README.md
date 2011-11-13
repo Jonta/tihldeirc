@@ -62,3 +62,15 @@ Example:
 
     e to('eirikb', 'Dude, this is',  'madness!'.toUpperCase())
 
+r
+---
+
+    r = function(key, name)
+
+This is a workaround for autoloading modules on start.  
+It will try to require a module with name _name_ and assign it to _this[key]_.  
+Example:
+
+    e r('$', 'jquery')
+
+It will also require it when called
