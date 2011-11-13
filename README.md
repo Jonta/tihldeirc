@@ -16,7 +16,9 @@ It will store all variables (as much as it can), and reload them on startup.
 
 API
 --
-Some functions built into the bot
+Some functions built into the bot.  
+Note that these are called from IRC (channel, or pm to bot).  
+Current trigger key: *e*
 
 on
 ---
@@ -28,17 +30,17 @@ callback will be called if trigger match.
 If replaceTrigger is set to true it will replace trigger with '' in message.  
 Example:
 
-    on(/^world /, function(f,t,m) { s(f, 'said', m) }, true)
-    on(/^hello/, function(f,t,m) { s(m, ', world!') })
+    e on(/^world /, function(f,t,m) { s(f, 'said', m) }, true)
+    e on(/^hello/, function(f,t,m) { s(m, ', world!') })
 
 All triggers are stored in _this.listeners_. If removed they will not reappear on reload. Example:
 
-    listeners = listeners.filter(function(l) { return l !== /^hello/ })
+    e listeners = listeners.filter(function(l) { return l !== /^hello/ })
 
 or
 
-    listeners.map(function(l) { return l.trigger })
-    listeners.splice(2)
+    e listeners.map(function(l) { return l.trigger })
+    e listeners.splice(2)
 
 s
 ---
@@ -48,11 +50,15 @@ s
 This function will post everything it was given to the last place it was called from. NOTE that replyto changes all the time so this might not behave as expected.  
 Example:
 
-    s('Hello', ', world!', new Date(), 1337)
+    e s('Hello', ', world!', new Date(), 1337)
 
 to
 ---
 
     to = function(to) { client.say(to, arguments) }
 
-Same as _s_, but can define who to send message to
+Same as _s_, but can define who to send message to.  
+Example:
+
+    e to('eirikb', 'Dude, this is',  'madness!'.toUpperCase())
+
