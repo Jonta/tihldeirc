@@ -1,5 +1,5 @@
 { 
-    "server": "irc.freenode.org", 
+    "server": "irc.homelien.no", 
     "nick": "hilde", 
     "extra": {
         "channels": ["#testfrest"]

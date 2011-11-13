@@ -3,15 +3,16 @@ irc = require('irc');
 
 var replyto, client, config, ignored, fname = 'evaled.json';
 
-var readline = require('readline'),
-rl = readline.createInterface(process.stdin, process.stdout);
-
 function traverse(o, cb) {
     if (Array.isArray(o)) {
         return o.map(function(e, i) {
             return traverse(e, cb);
         });
     } else if (typeof o === 'object') {
+        if (('' + o).match(/^\/.*\/$/)) {
+            return '' + o;
+        }
+
         return Object.keys(o).reduce(function(o2, key) {
             o2[key] = traverse(o[key], cb);
             return o2;
@@ -35,13 +36,17 @@ function toJSON(o) {
 function fromJSON(json) {
     var data = traverse(JSON.parse(json), function(o) {
         if (typeof o === 'string') {
-            try {
-                return eval('temphack2000=' + o);
-            } catch(e) {}
+            if (o.match(/^function/)) {
+                try {
+                    return eval('temphack2000=' + o);
+                } catch(e) {}
+            } else if (o.match(/^\/.*\/$/)) {
+                return eval(o);
+            }
         }
         return o;
     });
-    delete evaled.temphack2000;
+    delete temphack2000;
     return data;
 }
 
@@ -51,19 +56,21 @@ function keys() {
     });
 }
 
-rl.on('line', function(line) {
-    boss(line, function(e, r) {
-        if (e) {
-            console.log(e);
-        } else {
-            console.log(r)
+function addListener(listener) {
+    client.on('message', function(f, t, m) {
+        if (!listener.trigger) {
+            listener.listener(f, t, m);
+        } else if (m.match(listener.trigger)) {
+            if (listener.replace) {
+                m = m.replace(listener.trigger, '');
+            }
+            listener.listener(f, t, m);
         }
     });
-});
+}
 
 try {
     config = require('./config.json');
-    /*
     client = new irc.Client(config.server, config.nick, config.extra);
 
     client.addListener('message', function(from, to, message) {
@@ -80,7 +87,6 @@ try {
             });
         }
     });
-    */
 } catch(e) {
     console.err('Unable to start client', e);
 }
@@ -93,9 +99,14 @@ setTimeout(function() {
             client && client.say(replyto, msg);
         };
 
-        this.m = function(listener) {
-            this.listeners.push(listener);
-            //client.on('message', listener);
+        this.on = function(trigger, listener, replace) {
+            listener = {
+                trigger: trigger,
+                listener: listener,
+                replace: replace
+            };
+            listeners.push(listener);
+            addListener(listener);
             persist();
         };
 
@@ -115,14 +126,11 @@ setTimeout(function() {
                     });
                 } catch(e) {}
             }
-            /*
             if (Array.isArray(this.listeners)) {
                 this.listeners.forEach(function(listener) {
-                    console.log('ADD LISTENER', listener);
-                    //client.on('message', listener);
+                    addListener(listener);
                 });
             }
-            */
         });
     } ())
 },
