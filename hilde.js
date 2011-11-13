@@ -81,7 +81,7 @@ try {
         if (message.match(/^e /) || to === client.nick) {
             boss(message.replace(/^e /, ''), function(e, result) {
                 if (!e) {
-                    client.say(replyto, util.inspect(result));
+                    client.say(replyto, util.inspect(result).split(/\n/).join(' ').slice(0, 200));
                 } else {
                     client.say(from, e);
                 }
@@ -119,10 +119,21 @@ setTimeout(function() {
             persist();
         };
 
+        this.r = function(key, name) {
+            reqs.push({
+                key: key,
+                name: name
+            });
+            return require(name);
+        };
+
         ignored = Object.keys(this);
 
         if (typeof this.listeners === 'undefined') {
             this.listeners = [];
+        }
+        if (typeof this.reqs === 'undefined') {
+            this.reqs = [];
         }
 
         fs.readFile(fname, function(err, data) {
@@ -138,6 +149,11 @@ setTimeout(function() {
             if (Array.isArray(this.listeners)) {
                 this.listeners.forEach(function(listener) {
                     addListener(listener);
+                });
+            }
+            if (Array.isArray(this.reqs)) {
+                this.reqs.forEach(function(r) {
+                    this[r.key]  = require(r.name);
                 });
             }
         });
