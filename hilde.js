@@ -83,7 +83,6 @@ try {
                             this[l]();
                         });
                     }
-
                 }
             });
         });
@@ -97,7 +96,7 @@ try {
             boss(message.replace(/^e /, ''), function(e, result) {
                 if (!e) {
                     var r = util.inspect(result).split(/\n/).join(' ').slice(0, 200);
-                    if (typeof result !== 'object') {
+                    if (r.length < 150) {
                         client.say(replyto, r);
                     } else {
                         client.say(from, r);
