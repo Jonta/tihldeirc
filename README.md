@@ -81,3 +81,8 @@ Interesting arrays
 _this.listeners_ = Triggers that will be injected on load, appended by _on_-function.  
 _this.reqs_ = All modules that will be required on load, appended by _r_-function.  
 _this.onload_ = All normal functions that should be run on load, annotated with string-name of function, appended to manually.  
+
+Note
+--
+
+Lots of hacks have been made, not that functions are located in the json by the fact that they are strings, and start with "function" (this can be made even more obscure, but it will not remove the fact of the hack). channels-option is not used, and channels are rather specified outside the normal config (meta), this because onload need to be ran after all channels are joined, and to know about this channels must be joined manually (it seems)...
