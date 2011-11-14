@@ -129,11 +129,14 @@ setTimeout(function() {
 
         ignored = Object.keys(this);
 
+        if (typeof this.reqs === 'undefined') {
+            this.reqs = [];
+        }
         if (typeof this.listeners === 'undefined') {
             this.listeners = [];
         }
-        if (typeof this.reqs === 'undefined') {
-            this.reqs = [];
+        if (typeof this.onload === 'undefined') {
+            this.onload = [];
         }
 
         fs.readFile(fname, function(err, data) {
@@ -146,14 +149,19 @@ setTimeout(function() {
                     });
                 } catch(e) {}
             }
+            if (Array.isArray(this.reqs)) {
+                this.reqs.forEach(function(r) {
+                    this[r.key]  = require(r.name);
+                });
+            }
             if (Array.isArray(this.listeners)) {
                 this.listeners.forEach(function(listener) {
                     addListener(listener);
                 });
             }
-            if (Array.isArray(this.reqs)) {
-                this.reqs.forEach(function(r) {
-                    this[r.key]  = require(r.name);
+            if (Array.isArray(this.onload)) {
+                this.onload.forEach(function(l) {
+                    this[l]();
                 });
             }
         });

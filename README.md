@@ -14,7 +14,7 @@ Eval is evil
 This bot can only do one thing, and that is evil eval.  
 It will store all variables (as much as it can), and reload them on startup.
 
-API
+Usage
 --
 Some functions built into the bot.  
 Note that these are called from IRC (channel, or pm to bot).  
@@ -74,3 +74,10 @@ Example:
     e r('$', 'jquery')
 
 It will also require it when called
+
+Interesting arrays
+--
+
+_this.listeners_ = Triggers that will be injected on load, appended by _on_-function.  
+_this.reqs_ = All modules that will be required on load, appended by _r_-function.  
+_this.onload_ = All normal functions that should be run on load, annotated with string-name of function, appended to manually.  
