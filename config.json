@@ -2,6 +2,9 @@
     "server": "irc.homelien.no", 
     "nick": "hilde", 
     "extra": {
+        "autoConnect": false
+    },
+    "meta": {
         "channels": ["#testfrest"]
     }
 }

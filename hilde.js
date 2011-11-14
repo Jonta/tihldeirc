@@ -73,6 +73,21 @@ function addListener(listener) {
 try {
     config = require('./config.json');
     client = new irc.Client(config.server, config.nick, config.extra);
+    client.connect(function() {
+        var i = 0;
+        config.meta.channels.forEach(function(c) {
+            client.join(c, function() {
+                if (++i === config.meta.channels.length) {
+                    if (Array.isArray(onload)) {
+                        onload.forEach(function(l) {
+                            this[l]();
+                        });
+                    }
+
+                }
+            });
+        });
+    });
 
     client.addListener('message', function(from, to, message) {
         replyto = to !== client.nick ? to: from;
@@ -89,7 +104,7 @@ try {
         }
     });
 } catch(e) {
-    console.err('Unable to start client', e);
+    console.error('Unable to start client', e);
 }
 
 setTimeout(function() {
@@ -157,11 +172,6 @@ setTimeout(function() {
             if (Array.isArray(this.listeners)) {
                 this.listeners.forEach(function(listener) {
                     addListener(listener);
-                });
-            }
-            if (Array.isArray(this.onload)) {
-                this.onload.forEach(function(l) {
-                    this[l]();
                 });
             }
         });
