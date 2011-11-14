@@ -96,7 +96,12 @@ try {
         if (message.match(/^e /) || to === client.nick) {
             boss(message.replace(/^e /, ''), function(e, result) {
                 if (!e) {
-                    client.say(replyto, util.inspect(result).split(/\n/).join(' ').slice(0, 200));
+                    var r = util.inspect(result).split(/\n/).join(' ').slice(0, 200);
+                    if (typeof result !== 'object') {
+                        client.say(replyto, r);
+                    } else {
+                        client.say(from, r);
+                    }
                 } else {
                     client.say(from, e);
                 }
