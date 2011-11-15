@@ -115,7 +115,7 @@ setTimeout(function() {
     // Refer this to global object
     (function() {
         // Of all the hacks, this is the worst, but.. meh
-        this.s = function() {
+        this.say = function() {
             var msg = [].slice.apply(arguments).join(' ');
             client && client.say(replyto, msg);
         };
@@ -138,7 +138,7 @@ setTimeout(function() {
             persist();
         };
 
-        this.r = function(key, name) {
+        this.req = function(key, name) {
             reqs.push({
                 key: key,
                 name: name

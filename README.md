@@ -14,6 +14,11 @@ Eval is evil
 This bot can only do one thing, and that is evil eval.  
 It will store all variables (as much as it can), and reload them on startup.
 
+Where be plugins?
+--
+
+There are no plugins, the point of this bot is to program it from IRC directly!
+
 Usage
 --
 Some functions built into the bot.  
@@ -30,8 +35,8 @@ callback will be called if trigger match.
 If replaceTrigger is set to true it will replace trigger with '' in message.  
 Example:
 
-    e on(/^world /, function(f,t,m) { s(f, 'said', m) }, true)
-    e on(/^hello/, function(f,t,m) { s(m, ', world!') })
+    e on(/^world /, function(f,t,m) { say(f, 'said', m) }, true)
+    e on(/^hello/, function(f,t,m) { say(m, ', world!') })
 
 All triggers are stored in _this.listeners_. If removed they will not reappear on reload. Example:
 
@@ -45,33 +50,33 @@ or
 s
 ---
 
-    s = function() { client.say(replyto, arguments) }
+    say = function() { client.say(replyto, arguments) }
 
 This function will post everything it was given to the last place it was called from. NOTE that replyto changes all the time so this might not behave as expected.  
 Example:
 
-    e s('Hello', ', world!', new Date(), 1337)
+    e say('Hello', ', world!', new Date(), 1337)
 
 to
 ---
 
     to = function(to) { client.say(to, arguments) }
 
-Same as _s_, but can define who to send message to.  
+Same as _say_, but can define who to send message to.  
 Example:
 
     e to('eirikb', 'Dude, this is',  'madness!'.toUpperCase())
 
-r
+req
 ---
 
-    r = function(key, name)
+    req = function(key, name)
 
 This is a workaround for autoloading modules on start.  
 It will try to require a module with name _name_ and assign it to _this[key]_.  
 Example:
 
-    e r('$', 'jquery')
+    e req('$', 'jquery')
 
 It will also require it when called
 
