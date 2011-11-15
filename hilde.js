@@ -65,7 +65,11 @@ function addListener(listener) {
             if (listener.replace) {
                 m = m.replace(listener.trigger, '');
             }
-            listener.listener(f, t, m);
+            try {
+                listener.listener(f, t, m);
+            } catch (e) { 
+                console.error(e);
+            }
         }
     });
 }
