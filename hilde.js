@@ -66,7 +66,7 @@ function addListener(listener) {
             }
             try {
                 listener.listener(f, t, m);
-            } catch (e) { 
+            } catch(e) {
                 console.error(e);
             }
         }
@@ -95,10 +95,10 @@ try {
         replyto = to !== client.nick ? to: from;
 
         console.log(from + ' => ' + to + ': ' + message);
-        if (message.match(/^e /) || to === client.nick) {
-            boss(message.replace(/^e /, ''), function(e, result) {
+        if ((message.match(/^\./) && ! message.match(/^\.\./)) || to === client.nick) {
+            boss(message.replace(/^\. /, ''), function(e, result) {
                 if (!e) {
-                    var r = result.split(/\n/).join(' ').slice(0, 300);
+                    var r = ('' + result).split(/\n/).join(' ').slice(0, 300);
                     if (r.length < 150) {
                         client.say(replyto, r);
                     } else {
@@ -112,7 +112,7 @@ try {
     });
 
     // Catch all errors like a boss
-    client.on('error', function(e){
+    client.on('error', function(e) {
         console.error(e);
     });
 } catch(e) {
