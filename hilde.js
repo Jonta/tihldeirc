@@ -1,6 +1,5 @@
 var fs = require('fs'),
-irc = require('irc'),
-util = require('util');
+irc = require('irc');
 
 var replyto, client, config, ignored, fname = 'evaled.json';
 
@@ -99,7 +98,7 @@ try {
         if (message.match(/^e /) || to === client.nick) {
             boss(message.replace(/^e /, ''), function(e, result) {
                 if (!e) {
-                    var r = util.inspect(result).split(/\n/).join(' ').slice(0, 200);
+                    var r = result.split(/\n/).join(' ').slice(0, 300);
                     if (r.length < 150) {
                         client.say(replyto, r);
                     } else {
@@ -110,6 +109,11 @@ try {
                 }
             });
         }
+    });
+
+    // Catch all errors like a boss
+    client.on('error', function(e){
+        console.error(e);
     });
 } catch(e) {
     console.error('Unable to start client', e);
