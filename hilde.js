@@ -96,7 +96,7 @@ try {
 
         console.log(from + ' => ' + to + ': ' + message);
         if ((message.match(/^\./) && ! message.match(/^\.\./)) || to === client.nick) {
-            boss(message.replace(/^\. /, ''), function(e, result) {
+            boss(message.replace(/^\./, ''), function(e, result) {
                 if (!e) {
                     var r = ('' + result).split(/\n/).join(' ').slice(0, 300);
                     if (r.length < 150) {
