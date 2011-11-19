@@ -1,7 +1,19 @@
 var fs = require('fs'),
-irc = require('irc');
+irc = require('irc'),
+http = require('http'),
+url = require('url');
 
 var replyto, client, config, ignored, fname = 'evaled.json';
+
+http.createServer(function(req, res) {
+    res.writeHead(200, {
+        'Content-Type': 'text/plain'
+    });
+    var q = url.parse(req.url.slice(1), true).path;
+    boss(q, function(e, result) {
+        res.end('' + (e ? e: result));
+    });
+}).listen(3000);
 
 function traverse(o, cb) {
     if (Array.isArray(o)) {
