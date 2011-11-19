@@ -89,7 +89,6 @@ function addListener(listener) {
     });
 }
 
-/*
 try {
     config = require('./config.json');
     client = new irc.Client(config.server, config.nick, config.extra);
@@ -135,7 +134,6 @@ try {
 } catch(e) {
     console.error('Unable to start client', e);
 }
-*/
 
 setTimeout(function() {
     // Refer this to global object
