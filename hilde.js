@@ -10,9 +10,13 @@ http.createServer(function(req, res) {
         'Content-Type': 'text/plain'
     });
     var q = url.parse(req.url, true).query;
-    boss(q, function(e, result) {
-        res.end('' + (e ? e: result));
-    });
+    if (q.query) {
+        boss(q.query, function(e, result) {
+            res.end('' + (e ? e: result));
+        });
+    } else {
+        res.end('meh');
+    }
 }).listen(3000);
 
 function traverse(o, cb) {
@@ -85,6 +89,7 @@ function addListener(listener) {
     });
 }
 
+/*
 try {
     config = require('./config.json');
     client = new irc.Client(config.server, config.nick, config.extra);
@@ -130,6 +135,7 @@ try {
 } catch(e) {
     console.error('Unable to start client', e);
 }
+*/
 
 setTimeout(function() {
     // Refer this to global object
