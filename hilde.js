@@ -76,7 +76,7 @@ function keys() {
 
 function addListener(listener) {
     var f = function(f, t, m) {
-        if (!listener.trigger) {
+        if (!listener.trigger || listener.length === 0) {
             listener.listener(f, t, m);
         } else if (m.match(listener.trigger)) {
             if (listener.replace) {
@@ -127,6 +127,7 @@ try {
                         }
                     }
                 } else {
+                    console.error(e);
                     client.say(from, e);
                 }
             });
@@ -160,6 +161,7 @@ setTimeout(function() {
         this.on = function(trigger, listener, replace) {
             if (arguments.length === 1) {
                 listener = trigger;
+                trigger = '';
             }
             listener = {
                 trigger: trigger,
@@ -253,6 +255,7 @@ function boss(line, cb) {
         }
         cb && cb(null, e);
     } catch(err) {
+        console.error(err);
         cb && cb(err);
     }
 }
