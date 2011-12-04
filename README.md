@@ -17,13 +17,13 @@ It will store all variables (as much as it can), and reload them on startup.
 Where be plugins?
 --
 
-There are no plugins, the point of this bot is to program it from IRC directly!
+There are no plugins, the point of this bot is to program it from IRC directly, like a boss!
 
 Usage
 --
 Some functions built into the bot.  
 Note that these are called from IRC (channel, or pm to bot).  
-Current trigger key: *e*
+Current trigger key: *.*
 
 on
 ---
@@ -32,22 +32,32 @@ on
 
 trigger is RegExp and will match on every incoming message.  
 callback will be called if trigger match.  
+If no trigger is specified it listens to all messages.  
 If replaceTrigger is set to true it will replace trigger with '' in message.  
 Example:
 
-    e on(/^world /, function(f,t,m) { say(f, 'said', m) }, true)
-    e on(/^hello/, function(f,t,m) { say(m, ', world!') })
+    .on(/^world /, function(f,t,m) { say(f, 'said', m) }, true)
+    .on(/^hello/, function(f,t,m) { say(m, ', world!') })
+    .on(function(f,t,m){if (f.match(/eirikb/)){say('eirikb: ssshh') }})
 
-All triggers are stored in _this.listeners_. If removed they will not reappear on reload. Example:
+All triggers are stored in _this.listeners_. To view all triggers to this:
 
-    e listeners = listeners.filter(function(l) { return l !== /^hello/ })
+    .listeners.map(function(l){return l.trigger})
 
-or
+off
+---
 
-    e listeners.map(function(l) { return l.trigger })
-    e listeners.splice(2)
+Remove listeners, takes either regex, index of no argument.  
+Regex will search for all similar regex triggers in listeners and remove them.  
+Index will remove a given index.  
+No argument will remove the last listener.  
+Example:  
 
-s
+    .off(/^calc /)
+    .off(4)
+    .off()
+
+say
 ---
 
     say = function() { client.say(replyto, arguments) }
@@ -55,7 +65,7 @@ s
 This function will post everything it was given to the last place it was called from. NOTE that replyto changes all the time so this might not behave as expected.  
 Example:
 
-    e say('Hello', ', world!', new Date(), 1337)
+    .say('Hello', ', world!', new Date(), 1337)
 
 to
 ---
@@ -65,27 +75,23 @@ to
 Same as _say_, but can define who to send message to.  
 Example:
 
-    e to('eirikb', 'Dude, this is',  'madness!'.toUpperCase())
+    .to('eirikb', 'Dude, this is',  'madness!'.toUpperCase())
 
-req
+onload
 ---
 
-    req = function(key, name)
+Used to push strings that will be run on startup, like this:
 
-This is a workaround for autoloading modules on start.  
-It will try to require a module with name _name_ and assign it to _this[key]_.  
-Example:
-
-    e req('$', 'jquery')
-
-It will also require it when called
+    .onload.push('util = require("util")')
+    .onload.push('runMe()')
 
 Interesting arrays
 --
 
 _this.listeners_ = Triggers that will be injected on load, appended by _on_-function.  
 _this.reqs_ = All modules that will be required on load, appended by _r_-function.  
-_this.onload_ = All normal functions that should be run on load, annotated with string-name of function, appended to manually.  
+_this.onload_ = Array of strings that will be evil evaled on startup
+All normal functions that should be run on load, annotated with string-name of function, appended to manually.  
 
 Note
 --
