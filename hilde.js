@@ -1,17 +1,19 @@
+// Disclmer: This whole thing is one big hack, and I love it
 var fs = require('fs'),
 irc = require('irc'),
 http = require('http'),
 url = require('url');
 
-var replyto, client, config, ignored, fname = 'evaled.json';
+var replyto, client, config, ignored, fname = 'evaled.json',
+actuallisteners = [];
 
 http.createServer(function(req, res) {
     res.writeHead(200, {
         'Content-Type': 'text/plain'
     });
     var q = url.parse(req.url, true).query;
-    if (q.query) {
-        boss(q.query, function(e, result) {
+    if (q.q) {
+        boss(q.q, function(e, result) {
             res.end('' + (e ? e: result));
         });
     } else {
@@ -73,7 +75,7 @@ function keys() {
 }
 
 function addListener(listener) {
-    client.on('message', function(f, t, m) {
+    var f = function(f, t, m) {
         if (!listener.trigger) {
             listener.listener(f, t, m);
         } else if (m.match(listener.trigger)) {
@@ -86,7 +88,9 @@ function addListener(listener) {
                 console.error(e);
             }
         }
-    });
+    };
+    actuallisteners.push(f);
+    client.on('message', f);
 }
 
 try {
@@ -99,7 +103,7 @@ try {
                 if (++i === config.meta.channels.length) {
                     if (Array.isArray(onload)) {
                         onload.forEach(function(l) {
-                            this[l]();
+                            boss(l);
                         });
                     }
                 }
@@ -114,11 +118,13 @@ try {
         if ((message.match(/^\./) && ! message.match(/^\.\./)) || to === client.nick) {
             boss(message.replace(/^\./, ''), function(e, result) {
                 if (!e) {
-                    var r = ('' + result).split(/\n/).join(' ').slice(0, 300);
-                    if (r.length < 150) {
-                        client.say(replyto, r);
-                    } else {
-                        client.say(from, r);
+                    if (typeof result !== 'undefined') {
+                        var r = ('' + result).split(/\n/).join(' ').slice(0, 300);
+                        if (r.length < 150) {
+                            client.say(replyto, r);
+                        } else {
+                            client.say(from, r);
+                        }
                     }
                 } else {
                     client.say(from, e);
@@ -138,7 +144,7 @@ try {
 setTimeout(function() {
     // Refer this to global object
     (function() {
-        // Of all the hacks, this is the worst, but.. meh
+        // Of all the hacks this is probably the worst
         this.say = function() {
             var msg = [].slice.apply(arguments).join(' ');
             client && client.say(replyto, msg);
@@ -152,6 +158,9 @@ setTimeout(function() {
         };
 
         this.on = function(trigger, listener, replace) {
+            if (arguments.length === 1) {
+                listener = trigger;
+            }
             listener = {
                 trigger: trigger,
                 listener: listener,
@@ -160,21 +169,45 @@ setTimeout(function() {
             listeners.push(listener);
             addListener(listener);
             persist();
+            say('Added listner');
         };
 
-        this.req = function(key, name) {
-            reqs.push({
-                key: key,
-                name: name
+        this.off = function(regexOrIndex) {
+            var count = listeners.length,
+            toremove = [];
+
+            if (arguments.length === 0) {
+                regexOrIndex = listeners.length - 1;
+            }
+            if (typeof regexOrIndex === 'number') {
+                listeners.splice(regexOrIndex, 1);
+                toremove.push(regexOrIndex)
+            } else {
+                listeners = listeners.filter(function(l, i) {
+                    console.log(l.trigger, regexOrIndex);
+                    if ('' + l.trigger === '' + regexOrIndex) {
+                        toremove.push(i);
+                        return false;
+                    }
+                    return true;
+                });
+
+            }
+            actuallisteners = actuallisteners.filter(function(al, i) {
+                if (toremove.indexOf(i) >= 0) {
+                    console.log(i, l.trigger, al)
+                    client.removeListener('message', al);
+                    return false;
+                }
+                return true;
             });
-            return require(name);
+            if (listeners.length < count) {
+                say('Removed ', count - listeners.length, ' listeners');
+            }
         };
 
         ignored = Object.keys(this);
 
-        if (typeof this.reqs === 'undefined') {
-            this.reqs = [];
-        }
         if (typeof this.listeners === 'undefined') {
             this.listeners = [];
         }
@@ -192,18 +225,13 @@ setTimeout(function() {
                     });
                 } catch(e) {}
             }
-            if (Array.isArray(this.reqs)) {
-                this.reqs.forEach(function(r) {
-                    this[r.key]  = require(r.name);
-                });
-            }
             if (Array.isArray(this.listeners)) {
                 this.listeners.forEach(function(listener) {
                     addListener(listener);
                 });
             }
         });
-    } ())
+    } ());
 },
 1)
 
@@ -217,14 +245,15 @@ function persist() {
 }
 
 function boss(line, cb) {
+    var e;
     try {
-        var e = eval(line);
+        e = eval(line);
         if (typeof e !== 'undefined') {
             persist();
-            cb && cb(null, e);
         }
-    } catch(e) {
-        cb && cb(e);
+        cb && cb(null, e);
+    } catch(err) {
+        cb && cb(err);
     }
 }
 
