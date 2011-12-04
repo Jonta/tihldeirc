@@ -21,9 +21,7 @@ There are no plugins, the point of this bot is to program it from IRC directly, 
 
 Usage
 --
-Some functions built into the bot.  
-Note that these are called from IRC (channel, or pm to bot).  
-Current trigger key: *.*
+The bot will eval every pm message, and every channel message that starts with *.*.
 
 on
 ---
