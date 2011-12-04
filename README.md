@@ -89,7 +89,6 @@ Interesting arrays
 --
 
 _this.listeners_ = Triggers that will be injected on load, appended by _on_-function.  
-_this.reqs_ = All modules that will be required on load, appended by _r_-function.  
 _this.onload_ = Array of strings that will be evil evaled on startup
 All normal functions that should be run on load, annotated with string-name of function, appended to manually.  
 
