@@ -169,7 +169,7 @@ setTimeout(function() {
             listeners.push(listener);
             addListener(listener);
             persist();
-            say('Added listner');
+            say('Added listener');
         };
 
         this.off = function(regexOrIndex) {
@@ -202,7 +202,7 @@ setTimeout(function() {
                 return true;
             });
             if (listeners.length < count) {
-                say('Removed ', count - listeners.length, ' listeners');
+                say('Removed', count - listeners.length, 'listeners');
             }
         };
 
