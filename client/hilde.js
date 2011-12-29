@@ -14,12 +14,14 @@ $(function() {
         switch (e.keyCode) {
         case 13:
             line = $input.val();
-            $input.val('');
-            buffer.push(line);
-            bufferPos = buffer.length;
-            $.get('/?q=' + encodeURIComponent(line), function(res) {
-                append(line + ':\n' + res);
-            });
+            if (line.length > 0) {
+                $input.val('');
+                buffer.push(line);
+                bufferPos = buffer.length;
+                $.get('/?q=' + encodeURIComponent(line), function(res) {
+                    append(line + ':\n' + res);
+                });
+            }
             return false;
         case 38:
             bufferPos--;
