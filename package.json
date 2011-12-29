@@ -3,7 +3,8 @@
   "author": "Eirik Brandtzæg <eirikb@eirikb.no>",
   "version": "0.0.4",
   "dependencies": {
-     "irc": "*"
+     "irc": "*",
+     "node-static": "*"
   }
 }
 

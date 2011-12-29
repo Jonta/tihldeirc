@@ -2,22 +2,24 @@
 var fs = require('fs'),
 irc = require('irc'),
 http = require('http'),
-url = require('url');
+url = require('url'),
+static = require('node-static');
 
 var replyto, client, config, ignored, fname = 'evaled.json',
-actuallisteners = [];
+actuallisteners = [],
+file = new(static.Server)('./client');
 
 http.createServer(function(req, res) {
-    res.writeHead(200, {
-        'Content-Type': 'text/plain'
-    });
     var q = url.parse(req.url, true).query;
     if (q.q) {
+        res.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
         boss(q.q, function(e, result) {
             res.end('' + (e ? e: result));
         });
     } else {
-        res.end('meh');
+        file.serve(req, res);
     }
 }).listen(3000);
 

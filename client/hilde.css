@@ -1,0 +1,24 @@
+body {
+    background-color: #EEE;
+    margin: 0 auto;
+    width: 720px;
+}
+
+textarea, input {
+    width: 720px;
+    color: #666;
+    font-size:14px;
+    margin: 5px 0px 10px 0px;
+    padding: 10px;
+    border: #999 1px solid;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    -moz-border-radius: 8px; 
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+}
+
+textarea:focus, input:focus {
+    color: #000;
+    outline: none;
+    border: #35a5e5 1px solid;
+}
