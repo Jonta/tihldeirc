@@ -3,11 +3,12 @@ var fs = require('fs'),
 irc = require('irc'),
 http = require('http'),
 url = require('url'),
+path = require('path'),
 static = require('node-static');
 
-var replyto, client, config, ignored, fname = 'evaled.json',
-actuallisteners = [],
-file = new(static.Server)('./client');
+var replyto, client, config, ignored, actuallisteners = [],
+fname = path.join(__dirname, 'evaled.json'),
+file = new(static.Server)(path.join(__dirname, 'client'));
 
 http.createServer(function(req, res) {
     var q = url.parse(req.url, true).query;
