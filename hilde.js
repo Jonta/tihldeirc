@@ -25,6 +25,7 @@ http.createServer(function(req, res) {
 }).listen(3000);
 
 function traverse(o, cb) {
+    if (typeof o === 'undefined' || o === null) return '';
     if (Array.isArray(o)) {
         return o.map(function(e, i) {
             return traverse(e, cb);
