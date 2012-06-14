@@ -58,13 +58,13 @@ function toJSON(o) {
 function fromJSON(json) {
     var data = traverse(JSON.parse(json), function(o) {
         if (typeof o === 'string') {
-            if (o.match(/^function/)) {
-                try {
+            try {
+                if (o.match(/^function/)) {
                     return eval('temphack2000=' + o);
-                } catch(e) {}
-            } else if (o.match(/^\/.*\/$/)) {
-                return eval(o);
-            }
+                } else if (o.match(/^\/.*\/$/)) {
+                    return eval(o);
+                }
+            } catch(e) {}
         }
         return o;
     });
