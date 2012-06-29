@@ -14,7 +14,8 @@ http.createServer(function(req, res) {
     var q = url.parse(req.url, true).query;
     if (q.q) {
         res.writeHead(200, {
-            'Content-Type': 'text/plain'
+            'Content-Type': 'text/plain',
+            'Access-Control-Allow-Origin': '*'
         });
         boss(q.q, function(e, result) {
             res.end('' + (e ? e: result));
