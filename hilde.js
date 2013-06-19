@@ -14,7 +14,8 @@ http.createServer(function(req, res) {
   var q = url.parse(req.url, true).query;
   if (q.q) {
     res.writeHead(200, {
-      'Content-Type': 'text/plain'
+      'Content-Type': 'text/plain; charset=utf-8',
+      'Access-Control-Allow-Origin': '*'
     });
     boss(q.q, function(e, result) {
       res.end('' + (e ? e : result));
@@ -23,6 +24,8 @@ http.createServer(function(req, res) {
     file.serve(req, res);
   }
 }).listen(3000);
+
+setInterval(persist, 1000 * 60 * 10);
 
 function traverse(o, cb) {
   if (typeof o === 'undefined' || o === null) return '';
@@ -57,13 +60,13 @@ function toJSON(o) {
 function fromJSON(json) {
   var data = traverse(JSON.parse(json), function(o) {
     if (typeof o === 'string') {
-      if (o.match(/^function/)) {
-        try {
+      try {
+        if (o.match(/^function/)) {
           return eval('temphack2000=' + o);
-        } catch (e) {}
-      } else if (o.match(/^\/.*\/$/)) {
-        return eval(o);
-      }
+        } else if (o.match(/^\/.*\/$/)) {
+          return eval(o);
+        }
+      } catch (e) {}
     }
     return o;
   });
@@ -173,7 +176,6 @@ setTimeout(function() {
       };
       listeners.push(listener);
       addListener(listener);
-      persist();
       say('Added listener');
     };
 
@@ -251,9 +253,6 @@ function boss(line, cb) {
   var e;
   try {
     e = eval(line);
-    if (typeof e !== 'undefined') {
-      persist();
-    }
     cb && cb(null, e);
   } catch (err) {
     console.error(err);
