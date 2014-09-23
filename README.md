@@ -21,7 +21,7 @@ There are no plugins, the point of this bot is to program it from IRC directly, 
 
 Usage
 --
-The bot will eval every pm message, and every channel message that starts with *.*.
+The bot will eval every pm message, and every channel message that starts with a <code>.</code>
 
 on
 ---
